@@ -3,6 +3,5 @@ app/config.json
 
 server/node_modules/
 server/config.json
-server/uploads/
 
 .DS_Store
