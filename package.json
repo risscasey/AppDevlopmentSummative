@@ -25,6 +25,7 @@
     "mongoose": "^5.7.1"
   },
   "devDependencies": {
-    "grunt-contrib-watch": "^1.1.0"
+    "grunt-contrib-watch": "^1.1.0",
+    "nodemon": "^1.19.2"
   }
 }
