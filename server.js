@@ -51,12 +51,16 @@ app.post('/listing', function(req, res){
 
 });
 
-
 app.get('/allListings', function(req, res) {
   Listing.find().then(result => {
     res.send(result);
   });
 });
+
+// Update a product based on id
+app.patch('/listing/listing', function(req, res){
+  res.send('this is my id')
+})
 
 // larissa codes untill here
 
