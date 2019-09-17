@@ -12,6 +12,8 @@ const config = require('./config.json');
 
 const Listing = require('./models/listings.js');
 const User = require('./models/users');
+const Comments = require('./models/commenting');
+const Responce = require('./models/responce');
 
 
 mongoose.connect(`mongodb+srv://${config.mongoDBUser}:${config.mongoDBPassword}@${config.mongoClusterName}.mongodb.net/digimart?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true });
