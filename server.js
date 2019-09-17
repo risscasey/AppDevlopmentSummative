@@ -32,6 +32,10 @@ app.get('/', function(req, res){
     res.send('Welcome Digimart, a consumer to consumer platform where you can view, buy and sell items');
 });
 
+app.get('/allListings', function(req, res){
+    res.send('This is where we will be storing all our listings!');
+});
+
 
 app.listen(port, () => {
     console.clear();
