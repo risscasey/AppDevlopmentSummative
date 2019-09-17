@@ -42,7 +42,8 @@ app.post('/listing', function(req, res){
     _id: new mongoose.Types.ObjectId(),
     itemName: req.body.itemName,
     itemPrice: req.body.itemPrice,
-    itemDescription: req.body.itemDescription
+    itemDescription: req.body.itemDescription,
+    user_id: req.body.userId
   });
 
   listing.save().then(result => {
@@ -51,7 +52,6 @@ app.post('/listing', function(req, res){
 
 });
 
-
 app.get('/allListings', function(req, res) {
   Listing.find().then(result => {
     res.send(result);
@@ -59,6 +59,20 @@ app.get('/allListings', function(req, res) {
 });
 
 // larissa codes untill here
+
+app.delete('/listing/:id', function(req, res){
+    const id = req.params.id;
+    Listing.findById(id, function(err, listing){
+        if(listing['user_id'] == req.body.userId){
+            Listing.deleteOne({ _id: id }, function (err) {
+                res.send('deleted');
+            });
+        } else {
+            res.send('401');
+        }
+    }).catch(err => res.send('cannot find item with that id'));
+
+});
 
 app.post('/users', function(req, res) {
   User.findOne({ username: req.body.username }, function (err, checkUser) {
@@ -98,6 +112,8 @@ app.post('/getUser', function(req, res){
     }
   });
 });
+
+
 // Annie codes untill here
 
 
