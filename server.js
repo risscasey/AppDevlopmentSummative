@@ -10,6 +10,9 @@ const cors = require('cors');
 
 const config = require('./config.json');
 
+const Listing = require('./models/listings.js');
+const User = require('./models/users.js');
+
 mongoose.connect(`mongodb+srv://${config.mongoDBUser}:${config.mongoDBPassword}@${config.mongoClusterName}.mongodb.net/formative?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
@@ -32,10 +35,39 @@ app.get('/', function(req, res){
     res.send('Welcome Digimart, a consumer to consumer platform where you can view, buy and sell items');
 });
 
+
 app.get('/allListings', function(req, res){
     res.send('This is where we will be storing all our listings!');
 });
 
+// larissa codes untill here
+
+app.post('/users', function(req, res) {
+  User.findOne({ username: req.body.username }, function (err, checkUser) {
+        if(checkUser){
+            res.send('user already exists');
+        } else {
+            const hash = bcrypt.hashSync(req.body.password);
+            const user = new User({
+                _id: new mongoose.Types.ObjectId(),
+                fullName: req.body.fullName,
+                username: req.body.username,
+                password: hash,
+                email: req.body.email
+            });
+            // Save user in database
+            user.save().then(result => {
+                res.send(result);
+            }).catch(err => res.send(err));
+        }
+    });
+});
+
+// Annie codes untill here
+
+
+
+// Katherine codes untill here
 
 app.listen(port, () => {
     console.clear();

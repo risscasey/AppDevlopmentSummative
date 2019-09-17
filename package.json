@@ -23,9 +23,5 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.7.1"
-  },
-  "devDependencies": {
-    "grunt-contrib-watch": "^1.1.0",
-    "nodemon": "^1.19.2"
   }
 }
