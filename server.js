@@ -51,11 +51,11 @@ app.post('/listing', function(req, res){
 
 });
 
-app.get('/allListings', function(req, res){
-    Listing.find().then(result => {
-        res.send(result);
-    })
-})
+app.get('/allListings', function(req, res) {
+  Listing.find().then(result => {
+    res.send(result);
+  });
+});
 // larissa codes untill here
 
 app.post('/users', function(req, res) {
@@ -70,10 +70,16 @@ app.post('/users', function(req, res) {
         email: req.body.email,
         password: hash
       });
-      user.save().then(result => {
-          res.send(result);
+      user.save().then(data => {
+          res.send(data);
       }).catch(err => res.send(err));
     }
+  });
+});
+
+app.get('/allUsers', function(req, res) {
+  User.find().then(result => {
+    res.send(result);
   });
 });
 
