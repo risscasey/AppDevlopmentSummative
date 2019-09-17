@@ -51,20 +51,13 @@ app.post('/listing', function(req, res){
 
 });
 
-<<<<<<< HEAD
+
 app.get('/allListings', function(req, res) {
   Listing.find().then(result => {
     res.send(result);
   });
 });
-=======
-app.get('/allListings', function(req, res){
-  Listing.find().then(result => {
-    console.log(result);
-    res.send(result);
-  })
-})
->>>>>>> master
+
 // larissa codes untill here
 
 app.post('/users', function(req, res) {
