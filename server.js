@@ -10,7 +10,12 @@ const cors = require('cors');
 
 const config = require('./config.json');
 
+<<<<<<< HEAD
 const User = require('./models/users');
+=======
+const Listing = require('./models/listings.js');
+const User = require('./models/users.js');
+>>>>>>> b98ef9ac339b7c935c1c02d33a3f6f68d611e9a8
 
 mongoose.connect(`mongodb+srv://${config.mongoDBUser}:${config.mongoDBPassword}@${config.mongoClusterName}.mongodb.net/formative?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -34,7 +39,18 @@ app.get('/', function(req, res){
     res.send('Welcome Digimart, a consumer to consumer platform where you can view, buy and sell items');
 });
 
+<<<<<<< HEAD
 app.post('/users', function(req, res){
+=======
+
+app.get('/allListings', function(req, res){
+    res.send('This is where we will be storing all our listings!');
+});
+
+// larissa codes untill here
+
+app.post('/users', function(req, res) {
+>>>>>>> b98ef9ac339b7c935c1c02d33a3f6f68d611e9a8
   User.findOne({ username: req.body.username }, function (err, checkUser) {
     if(checkUser){
       res.send('user already exists');
@@ -52,6 +68,12 @@ app.post('/users', function(req, res){
     }
   });
 })
+
+// Annie codes untill here
+
+
+
+// Katherine codes untill here
 
 app.listen(port, () => {
     console.clear();
