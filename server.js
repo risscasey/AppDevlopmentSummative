@@ -100,7 +100,9 @@ app.post('/getUser', function(req, res){dy.username }, function (err, checkUser)
 });
 // Annie codes untill here
 
-
+app.post('/getComments', function(req, res) {
+  console.log();
+})
 
 // Katherine codes untill here
 
