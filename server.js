@@ -10,12 +10,12 @@ const cors = require('cors');
 
 const config = require('./config.json');
 
-<<<<<<< HEAD
+
 const User = require('./models/users');
-=======
+
 const Listing = require('./models/listings.js');
 const User = require('./models/users.js');
->>>>>>> b98ef9ac339b7c935c1c02d33a3f6f68d611e9a8
+
 
 mongoose.connect(`mongodb+srv://${config.mongoDBUser}:${config.mongoDBPassword}@${config.mongoClusterName}.mongodb.net/formative?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true });
 
