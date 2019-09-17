@@ -27,19 +27,34 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(cors());
 
 app.use(function(req, res, next){
-    console.log(`${req.method} request for ${req.url}`);
-    next();
+  console.log(`${req.method} request for ${req.url}`);
+  next();
 });
 
 app.get('/', function(req, res){
-    res.send('Welcome Digimart, a consumer to consumer platform where you can view, buy and sell items');
+  res.send('Welcome Digimart, a consumer to consumer platform where you can view, buy and sell items');
 });
 
+
+app.post('/listing', function(req, res){
+
+  const listing = new Listing({
+    _id: new mongoose.Types.ObjectId(),
+    itemName: req.body.itemName,
+    itemPrice: req.body.itemPrice,
+    itemDescription: req.body.itemDescription
+  });
+
+  listing.save().then(result => {
+    res.send(result);
+  }).catch(err => res.send(err));
+});
 
 app.get('/allListings', function(req, res){
-    res.send('This is where we will be storing all our listings!');
-});
-
+    Listing.find().then(result => {
+        res.send(result);
+    })
+})
 // larissa codes untill here
 
 app.post('/users', function(req, res) {
