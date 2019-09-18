@@ -87,7 +87,7 @@ app.get('/allUsers', function(req, res) {
   });
 });
 
-app.post('/getUser', function(req, res){dy.username }, function (err, checkUser) {
+app.post('/userLogin', function(req, res){dy.username }, function (err, checkUser) {
   if(checkUser){
     if(bcrypt.compareSync(req.body.password, checkUser.password)){
       res.send(checkUser);
