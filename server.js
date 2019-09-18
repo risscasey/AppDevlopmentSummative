@@ -100,6 +100,7 @@ app.post('/getUser', function(req, res){dy.username }, function (err, checkUser)
 });
 // Annie codes untill here
 
+// Add Comment
 app.post('/sendComments', function(req, res) {
     const comments = new Comments({
       _id: new mongoose.Types.ObjectId(),
@@ -110,6 +111,28 @@ app.post('/sendComments', function(req, res) {
       res.send(result);
     }).catch(err => res.send(err));
 })
+
+// Get all comments
+app.get('/allComments', function(req, res){
+    Comments.find().then(result => {
+        res.send(result);
+    })
+})
+
+//Get single comment based on ID
+app.get('/allComments/:id', function(req, res){
+  const id = req.params.id;
+  console.log(id);
+
+  Comments.findById(id, function(err, comments) {
+    if (comments['user_id'] == req.body.userId) {
+      res.send(comments)
+    } else {
+      res.send('401')
+    }
+  })
+
+});
 
 // Katherine codes untill here
 
