@@ -133,24 +133,6 @@ app.post('/allComments/:id', function(req, res){
   })
 });
 
-// Update a comment based on id
-app.patch('/allComments/:id', function(req, res){
-    const id = req.params.id;
-
-    Comments.findById(id, function(err, comments) {
-      if (comments['user_id'] == req.body.userId) {
-        const newComment = {
-            commentDescription: req.body.commentDescription
-        };
-        Comments.updateOne({ _id : id }, newComment).then(result => {
-            res.send(result);
-        }).catch(err => res.send(err));
-      } else {
-        res.send('401, permission denied')
-      }
-    }).catch(err => res.send('cannot find a product with that id'));
-})
-
 // Katherine codes untill here
 
 app.listen(port, () => {
