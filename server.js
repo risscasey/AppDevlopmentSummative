@@ -12,8 +12,8 @@ const config = require('./config.json');
 
 const Listing = require('./models/listings.js');
 const User = require('./models/users');
-const Comments = require('./models/commenting');
-const Responce = require('./models/responce');
+const Comments = require('./models/comments.js');
+// const Responce = require('./models/responce');
 
 
 mongoose.connect(`mongodb+srv://${config.mongoDBUser}:${config.mongoDBPassword}@${config.mongoClusterName}.mongodb.net/digimart?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true });
@@ -100,8 +100,15 @@ app.post('/getUser', function(req, res){dy.username }, function (err, checkUser)
 });
 // Annie codes untill here
 
-app.post('/getComments', function(req, res) {
-  console.log();
+app.post('/sendComments', function(req, res) {
+    const comments = new Comments({
+      _id: new mongoose.Types.ObjectId(),
+      commentDescription: req.body.commentDescription
+    });
+
+    comments.save().then(result => {
+      res.send(result);
+    }).catch(err => res.send(err));
 })
 
 // Katherine codes untill here
