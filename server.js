@@ -13,7 +13,7 @@ const config = require('./config.json');
 const Listing = require('./models/listings.js');
 const User = require('./models/users');
 const Comments = require('./models/comments.js');
-// const Responce = require('./models/responce');
+const Responce = require('./models/responce');
 
 
 mongoose.connect(`mongodb+srv://${config.mongoDBUser}:${config.mongoDBPassword}@${config.mongoClusterName}.mongodb.net/digimart?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true });
@@ -153,6 +153,17 @@ app.get('/allComments/:id', function(req, res){
 });
 
 // Katherine codes untill here
+// Annies code continues
+app.post('/sendResponse', function(req, res) {
+    const responce = new Responce({
+      _id: new mongoose.Types.ObjectId(),
+      responceDescription: req.body.responceDescription
+    });
+
+    responce.save().then(result => {
+      res.send(result);
+    }).catch(err => res.send(err));
+});
 
 app.listen(port, () => {
     console.clear();
