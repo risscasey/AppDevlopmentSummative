@@ -60,9 +60,9 @@ app.get('/allListings', function(req, res) {
 
 // larissa codes untill here
 
-app.delete('/listing/:id', function(req, res){
+app.delete('/listing/:id', function(req, res) {
     const id = req.params.id;
-    Listing.findById(id, function(err, listing){
+    Listing.findById(id, function(err, listing) {
         if(listing['user_id'] == req.body.userId){
             Listing.deleteOne({ _id: id }, function (err) {
                 res.send('deleted');
@@ -75,8 +75,8 @@ app.delete('/listing/:id', function(req, res){
 });
 
 app.post('/users', function(req, res) {
-  User.findOne({ username: req.body.username }, function (err, checkUser) {
-    if(checkUser){
+  User.findOne({ username: req.body.username }, function (err, existingUser) {
+    if(existingUser) {
       res.send('user already exists');
     } else {
       const hash = bcrypt.hashSync(req.body.password);
@@ -100,10 +100,10 @@ app.get('/allUsers', function(req, res) {
 });
 
 app.post('/getUser', function(req, res){
-  User.findOne({ username: req.body.username }, function (err, checkUser) {
-    if(checkUser){
-      if(bcrypt.compareSync(req.body.password, checkUser.password)){
-        res.send(checkUser);
+  User.findOne({ username: req.body.username }, function (err, validateUser) {
+    if(validateUser) {
+      if(bcrypt.compareSync(req.body.password, validateUser.password)){
+        res.send(validateUser);
       } else {
         res.send('invalid password');
       }
