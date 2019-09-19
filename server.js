@@ -13,7 +13,7 @@ const config = require('./config.json');
 const Listing = require('./models/listings.js');
 const User = require('./models/users');
 const Comments = require('./models/comments.js');
-// const Responce = require('./models/responce');
+const Responce = require('./models/responce');
 
 
 mongoose.connect(`mongodb+srv://${config.mongoDBUser}:${config.mongoDBPassword}@${config.mongoClusterName}.mongodb.net/digimart?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true });
@@ -44,7 +44,8 @@ app.post('/listing', function(req, res){
     _id: new mongoose.Types.ObjectId(),
     itemName: req.body.itemName,
     itemPrice: req.body.itemPrice,
-    itemDescription: req.body.itemDescription
+    itemDescription: req.body.itemDescription,
+    user_id: req.body.userId
   });
 
   listing.save().then(result => {
@@ -52,7 +53,6 @@ app.post('/listing', function(req, res){
   }).catch(err => res.send(err));
 
 });
-
 
 app.get('/allListings', function(req, res) {
   Listing.find().then(result => {
@@ -62,24 +62,38 @@ app.get('/allListings', function(req, res) {
 
 // larissa codes untill here
 
-// app.post('/users', function(req, res) {
-//   User.findOne({ username: req.body.username }, function (err, checkUser) {
-//     if(checkUser){
-//       res.send('user already exists');
-//     } else {
-//       const hash = bcrypt.hashSync(req.body.password);
-//       const user = new User ({
-//         _id: new mongoose.Types.ObjectId(),
-//         username: req.body.username,
-//         email: req.body.email,
-//         password: hash
-//       });
-//       user.save().then(data => {
-//           res.send(data);
-//       }).catch(err => res.send(err));
-//     }
-//   });
-// });
+app.delete('/listing/:id', function(req, res) {
+    const id = req.params.id;
+    Listing.findById(id, function(err, listing) {
+        if(listing['user_id'] == req.body.userId){
+            Listing.deleteOne({ _id: id }, function (err) {
+                res.send('deleted');
+            });
+        } else {
+            res.send('401');
+        }
+    }).catch(err => res.send('cannot find item with that id'));
+
+});
+
+app.post('/users', function(req, res) {
+  User.findOne({ username: req.body.username }, function (err, existingUser) {
+    if(existingUser) {
+      res.send('user already exists');
+    } else {
+      const hash = bcrypt.hashSync(req.body.password);
+      const user = new User ({
+        _id: new mongoose.Types.ObjectId(),
+        username: req.body.username,
+        email: req.body.email,
+        password: hash
+      });
+      user.save().then(data => {
+          res.send(data);
+      }).catch(err => res.send(err));
+    }
+  });
+});
 
 app.get('/allUsers', function(req, res) {
   User.find().then(result => {
@@ -87,17 +101,21 @@ app.get('/allUsers', function(req, res) {
   });
 });
 
-app.post('/userLogin', function(req, res){dy.username }, function (err, checkUser) {
-  if(checkUser){
-    if(bcrypt.compareSync(req.body.password, checkUser.password)){
-      res.send(checkUser);
+app.post('/getUser', function(req, res){
+  User.findOne({ username: req.body.username }, function (err, validateUser) {
+    if(validateUser) {
+      if(bcrypt.compareSync(req.body.password, validateUser.password)){
+        res.send(validateUser);
+      } else {
+        res.send('invalid password');
+      }
     } else {
-      res.send('invalid password');
+      res.send('invalid user');
     }
-  } else {
-    res.send('invalid user');
-  }
+  });
 });
+
+
 // Annie codes untill here
 
 // Add Comment
@@ -134,6 +152,38 @@ app.post('/allComments/:id', function(req, res){
 });
 
 // Katherine codes untill here
+
+// Annies code continues
+app.post('/sendResponse', function(req, res) {
+    const responce = new Responce({
+      _id: new mongoose.Types.ObjectId(),
+      responceDescription: req.body.responceDescription
+    });
+
+    responce.save().then(result => {
+      res.send(result);
+    }).catch(err => res.send(err));
+});
+
+app.get('/allResponses', function(req, res) {
+  Responce.find().then(result => {
+    res.send(result);
+  });
+});
+
+app.get('/allResponses/:id', function(req, res){
+  const id = req.params.id;
+  console.log(id);
+
+  Responce.findById(id, function(err, responce) {
+    if (responce['user_id'] == req.body.userId) {
+      res.send(responce)
+    } else {
+      res.send('401')
+    }
+  })
+
+});
 
 app.listen(port, () => {
     console.clear();
