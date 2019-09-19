@@ -60,9 +60,20 @@ app.get('/allListings', function(req, res) {
   });
 });
 
-// Update a product based on id
-app.patch('/listing/listing', function(req, res){
-  res.send('this is my id')
+app.get('/updateListing/:id', function(req, res){
+  const id = req.params.id;
+    Listing.findById(id, function(err, listing){
+
+      const newListing = {
+        itemName: req.body.itemName,
+        itemPrice: req.body.itemPrice,
+        itemDescription: req.body.itemDescription
+      };
+
+      Listing.updateOne({ _id : id }, newListing).then(result => {
+          res.send(result);
+      }).catch(err => res.send(err));
+    }).catch(err => res.send('cannot find product with that id'));
 })
 
 // larissa codes untill here
