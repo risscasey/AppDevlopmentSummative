@@ -153,6 +153,7 @@ app.get('/allComments/:id', function(req, res){
 });
 
 // Katherine codes untill here
+
 // Annies code continues
 app.post('/sendResponse', function(req, res) {
     const responce = new Responce({
@@ -163,6 +164,26 @@ app.post('/sendResponse', function(req, res) {
     responce.save().then(result => {
       res.send(result);
     }).catch(err => res.send(err));
+});
+
+app.get('/allResponses', function(req, res) {
+  Responce.find().then(result => {
+    res.send(result);
+  });
+});
+
+app.get('/allResponses/:id', function(req, res){
+  const id = req.params.id;
+  console.log(id);
+
+  Responce.findById(id, function(err, responce) {
+    if (responce['user_id'] == req.body.userId) {
+      res.send(responce)
+    } else {
+      res.send('401')
+    }
+  })
+
 });
 
 app.listen(port, () => {
