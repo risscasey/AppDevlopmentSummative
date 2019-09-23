@@ -57,7 +57,7 @@ app.post('/listing', function(req, res){
 app.get('/allListings', function(req, res) {
   Listing.find().then(result => {
     res.send(result);
-  });
+  }).catch(err => res.send(err));
 });
 
 app.get('/updateListing/:id', function(req, res){
@@ -75,6 +75,13 @@ app.get('/updateListing/:id', function(req, res){
       }).catch(err => res.send(err));
     }).catch(err => res.send('cannot find product with that id'));
 })
+
+app.get('/listing/:id', function(req, res){
+  const id = req.params.id;
+  Listing.findById(id, function (err, listing) {
+    res.send(listing);
+  });
+});
 
 // larissa codes untill here
 
