@@ -83,6 +83,17 @@ app.get('/listing/:id', function(req, res){
   });
 });
 
+// app.get('/allComments/:id', function(req, res){
+//   const selectedComment = req.params.id;
+//     Comments.findById(id, function(err, comments) {
+//       if (comments['user_id'] == req.body.userId) {
+//         res.send(comments)
+//       } else {
+//         res.send('401')
+//       }
+//     })
+// })
+
 // larissa codes untill here
 
 app.delete('/listing/:id', function(req, res) {
@@ -145,7 +156,8 @@ app.post('/getUser', function(req, res){
 app.post('/sendComments', function(req, res) {
     const comments = new Comments({
       _id: new mongoose.Types.ObjectId(),
-      commentDescription: req.body.commentDescription
+      commentDescription: req.body.commentDescription,
+      commentID: req.body.commentID
     });
 
     comments.save().then(result => {
@@ -159,6 +171,8 @@ app.get('/allComments', function(req, res){
         res.send(result);
     })
 })
+
+
 
 //Get single comment based on ID
 app.get('/allComments/:id', function(req, res){
