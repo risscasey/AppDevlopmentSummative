@@ -8,7 +8,8 @@ const listingSchema = new mongoose.Schema({
   user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+  itemImage: String
 });
 
 module.exports = mongoose.model('Listing', listingSchema);
