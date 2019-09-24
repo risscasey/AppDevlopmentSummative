@@ -69,6 +69,8 @@ app.get('/', function(req, res){
   res.send('Welcome Digimart, a consumer to consumer platform where you can view, buy and sell items');
 });
 
+// Annie codes untill here
+
 app.post('/listing', upload.single('uploadImage'),function(req, res){
   console.log(req);
   console.log(req.file);
