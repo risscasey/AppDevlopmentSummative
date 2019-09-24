@@ -8,6 +8,29 @@ const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb('null', '/uploads');
+  },
+  filename: function(req, file, cb) {
+    cd('null', new Date().toString() + file.originalname);
+  }
+});
+const fileFilter = function(req, file, cb) {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+      cb(null, false);
+  }
+}
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter
+});
+
 const config = require('./config.json');
 
 const Listing = require('./models/listings.js');
@@ -29,6 +52,8 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 app.use(cors());
 
+app.use('/uploads', express.static('uploads'));
+
 app.use(function(req, res, next){
   console.log(`${req.method} request for ${req.url}`);
   next();
@@ -38,14 +63,15 @@ app.get('/', function(req, res){
   res.send('Welcome Digimart, a consumer to consumer platform where you can view, buy and sell items');
 });
 
-app.post('/listing', function(req, res){
-
+app.post('/listing', upload.single('itemImage'),function(req, res){
+  console.log(req.file);
   const listing = new Listing({
     _id: new mongoose.Types.ObjectId(),
     itemName: req.body.itemName,
     itemPrice: req.body.itemPrice,
     itemDescription: req.body.itemDescription,
-    user_id: req.body.userId
+    user_id: req.body.userId,
+    itemImage: req.file.path
   });
 
   listing.save().then(result => {
@@ -187,6 +213,6 @@ app.get('/allResponses/:id', function(req, res){
 });
 
 app.listen(port, () => {
-    console.clear();
+    // console.clear();
     console.log(`application is running on port ${port}`);
 });
