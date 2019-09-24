@@ -124,7 +124,7 @@ app.get('/allUsers', function(req, res) {
   });
 });
 
-app.post('/getUser', function(req, res){
+app.post('/userLogin', function(req, res){
   User.findOne({ username: req.body.username }, function (err, validateUser) {
     if(validateUser) {
       if(bcrypt.compareSync(req.body.password, validateUser.password)){
