@@ -65,7 +65,7 @@ app.use(function(req, res, next){
   next();
 });
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
   res.send('Welcome Digimart, a consumer to consumer platform where you can view, buy and sell items');
 });
 
