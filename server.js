@@ -121,16 +121,16 @@ app.get('/listing/:id', function(req, res){
   });
 });
 
-// app.get('/allComments/:id', function(req, res){
-//   const selectedComment = req.params.id;
-//     Comments.findById(id, function(err, comments) {
-//       if (comments['user_id'] == req.body.userId) {
-//         res.send(comments)
-//       } else {
-//         res.send('401')
-//       }
-//     })
-// })
+app.get('/allComments/:id', function(req, res){
+  const selectedComment = req.params.id;
+    Comments.findById(id, function(err, comments) {
+      if (comments['user_id'] == req.body.userId) {
+        res.send(comments)
+      } else {
+        res.send('401')
+      }
+    })
+})
 
 // larissa codes untill here
 
