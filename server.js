@@ -8,12 +8,41 @@ const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const multer = require('multer');
+
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './uploads');
+  },
+  filename: function(req, file, cb) {
+    console.log(file);
+    var filename = file.originalname;
+    filename = filename.replace(/\s/g,'');
+    // const str = file.filename;
+    // str = str.replace(/\s+/g, '');
+    cb(null, Date.now() + '-' + filename);
+  }
+});
+const fileFilter = function(req, file, cb) {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+      cb(null, false);
+  }
+}
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter
+});
+
 const config = require('./config.json');
 
 const Listing = require('./models/listings.js');
 const User = require('./models/users');
 const Comments = require('./models/comments.js');
-// const Responce = require('./models/responce');
+const Responce = require('./models/responce');
 
 
 mongoose.connect(`mongodb+srv://${config.mongoDBUser}:${config.mongoDBPassword}@${config.mongoClusterName}.mongodb.net/digimart?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true });
@@ -29,6 +58,8 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 app.use(cors());
 
+app.use('/uploads', express.static('uploads'));
+
 app.use(function(req, res, next){
   console.log(`${req.method} request for ${req.url}`);
   next();
@@ -38,15 +69,21 @@ app.get('/', function(req, res){
   res.send('Welcome Digimart, a consumer to consumer platform where you can view, buy and sell items');
 });
 
-app.post('/listing', function(req, res){
+// Annie codes untill here
 
+app.post('/listing', upload.single('uploadImage'),function(req, res){
+  console.log(req);
+  console.log(req.file);
   const listing = new Listing({
     _id: new mongoose.Types.ObjectId(),
     itemName: req.body.itemName,
     itemPrice: req.body.itemPrice,
     itemDescription: req.body.itemDescription,
-    user_id: req.body.userId
+    user_id: req.body.userId,
+    itemImage: req.file.path
   });
+
+  console.log(req.file.path);
 
   listing.save().then(result => {
     res.send(result);
@@ -67,7 +104,8 @@ app.get('/updateListing/:id', function(req, res){
       const newListing = {
         itemName: req.body.itemName,
         itemPrice: req.body.itemPrice,
-        itemDescription: req.body.itemDescription
+        itemDescription: req.body.itemDescription,
+        itemImage: req.file.path
       };
 
       Listing.updateOne({ _id : id }, newListing).then(result => {
@@ -135,7 +173,7 @@ app.get('/allUsers', function(req, res) {
   });
 });
 
-app.post('/getUser', function(req, res){
+app.post('/userLogin', function(req, res){
   User.findOne({ username: req.body.username }, function (err, validateUser) {
     if(validateUser) {
       if(bcrypt.compareSync(req.body.password, validateUser.password)){
@@ -175,7 +213,7 @@ app.get('/allComments', function(req, res){
 
 
 //Get single comment based on ID
-app.get('/allComments/:id', function(req, res){
+app.post('/allComments/:id', function(req, res){
   const id = req.params.id;
   console.log(id);
 
@@ -186,12 +224,43 @@ app.get('/allComments/:id', function(req, res){
       res.send('401')
     }
   })
-
 });
 
 // Katherine codes untill here
 
+// Annies code continues
+app.post('/sendResponse', function(req, res) {
+    const responce = new Responce({
+      _id: new mongoose.Types.ObjectId(),
+      responceDescription: req.body.responceDescription
+    });
+
+    responce.save().then(result => {
+      res.send(result);
+    }).catch(err => res.send(err));
+});
+
+app.get('/allResponses', function(req, res) {
+  Responce.find().then(result => {
+    res.send(result);
+  });
+});
+
+app.get('/allResponses/:id', function(req, res){
+  const id = req.params.id;
+  console.log(id);
+
+  Responce.findById(id, function(err, responce) {
+    if (responce['user_id'] == req.body.userId) {
+      res.send(responce)
+    } else {
+      res.send('401')
+    }
+  })
+
+});
+
 app.listen(port, () => {
-    console.clear();
+    // console.clear();
     console.log(`application is running on port ${port}`);
 });
