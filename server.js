@@ -145,7 +145,15 @@ app.delete('/listing/:id', function(req, res) {
             res.send('401');
         }
     }).catch(err => res.send('cannot find item with that id'));
+});
 
+app.delete('/product/:id', function(req, res){
+  const id = req.params.id;
+  Listing.findById(id, function(err, listing){
+    Listing.deleteOne({ _id: id }, function (err) {
+                res.send('deleted');
+            });
+  }).catch(err => res.send('cannot find product with that id'));
 });
 
 app.post('/users', function(req, res) {
