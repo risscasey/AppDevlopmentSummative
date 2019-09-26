@@ -65,7 +65,7 @@ app.use(function(req, res, next){
   next();
 });
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
   res.send('Welcome Digimart, a consumer to consumer platform where you can view, buy and sell items');
 });
 
@@ -121,16 +121,16 @@ app.get('/listing/:id', function(req, res){
   });
 });
 
-// app.get('/allComments/:id', function(req, res){
-//   const selectedComment = req.params.id;
-//     Comments.findById(id, function(err, comments) {
-//       if (comments['user_id'] == req.body.userId) {
-//         res.send(comments)
-//       } else {
-//         res.send('401')
-//       }
-//     })
-// })
+app.get('/allComments/:id', function(req, res){
+  const selectedComment = req.params.id;
+    Comments.findById(id, function(err, comments) {
+      if (comments['user_id'] == req.body.userId) {
+        res.send(comments)
+      } else {
+        res.send('401')
+      }
+    })
+})
 
 // larissa codes untill here
 
