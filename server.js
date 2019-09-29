@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 2000;
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -112,7 +112,7 @@ app.get('/updateListing/:id', function(req, res){
           res.send(result);
       }).catch(err => res.send(err));
     }).catch(err => res.send('cannot find product with that id'));
-})
+});
 
 app.get('/listing/:id', function(req, res){
   const id = req.params.id;
@@ -137,23 +137,10 @@ app.get('/allComments/:id', function(req, res){
 app.delete('/listing/:id', function(req, res) {
     const id = req.params.id;
     Listing.findById(id, function(err, listing) {
-        if(listing['user_id'] == req.body.userId){
-            Listing.deleteOne({ _id: id }, function (err) {
-                res.send('deleted');
-            });
-        } else {
-            res.send('401');
-        }
+      Listing.deleteOne({ _id: id }, function (err) {
+          res.send('deleted');
+      });
     }).catch(err => res.send('cannot find item with that id'));
-});
-
-app.delete('/product/:id', function(req, res){
-  const id = req.params.id;
-  Listing.findById(id, function(err, listing){
-    Listing.deleteOne({ _id: id }, function (err) {
-                res.send('deleted');
-            });
-  }).catch(err => res.send('cannot find product with that id'));
 });
 
 app.post('/users', function(req, res) {
