@@ -22,7 +22,7 @@ Other projects requirements include:
 
 ## Project Installation
 
-This repository is the back end version of our project. If cloning this reposity, you will have to also have a server running and have it connected to mongodb. The repo for our server is located [here](https://github.com/risscasey/AppDevelopmentSummative-FE).
+This repository is the back end version of our project. If cloning this reposity, you will have to also have a server running and have it connected to mongodb. The repo for our front end is located [here](https://github.com/risscasey/AppDevelopmentSummative-FE).
 
 ### Installation
 To install everything needed for this project you need to have a stable version of Node JS and NPM installed on your computer or server;
